@@ -1,4 +1,4 @@
-package syftjson
+package buildxjson
 
 import (
 	"encoding/json"
@@ -6,7 +6,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/metasources/buildx/buildx/formats/syftjson/model"
+	"github.com/metasources/buildx/buildx/formats/buildxjson/model"
 )
 
 func validator(reader io.Reader) error {

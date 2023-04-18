@@ -17,7 +17,7 @@ func TestDirectoryScanCompletesWithinTimeout(t *testing.T) {
 	done := make(chan struct{})
 	go func() {
 		defer close(done)
-		cmd, stdout, stderr = runSyftInDocker(t, nil, image, "dir:/", "-vv")
+		cmd, stdout, stderr = runBuildxInDocker(t, nil, image, "dir:/", "-vv")
 	}()
 
 	select {

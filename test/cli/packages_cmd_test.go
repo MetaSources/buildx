@@ -68,7 +68,7 @@ func TestPackagesCmdFlags(t *testing.T) {
 		{
 			name: "output-env-binding",
 			env: map[string]string{
-				"SYFT_OUTPUT": "json",
+				"BUILDX_OUTPUT": "json",
 			},
 			args: []string{"packages", coverageImage},
 			assertions: []traitAssertion{
@@ -123,7 +123,7 @@ func TestPackagesCmdFlags(t *testing.T) {
 			name: "all-layers-scope-flag-by-env",
 			args: []string{"packages", "-o", "json", hiddenPackagesImage},
 			env: map[string]string{
-				"SYFT_PACKAGE_CATALOGER_SCOPE": "all-layers",
+				"BUILDX_PACKAGE_CATALOGER_SCOPE": "all-layers",
 			},
 			assertions: []traitAssertion{
 				assertPackageCount(164), // packages are now deduplicated for this case
@@ -135,7 +135,7 @@ func TestPackagesCmdFlags(t *testing.T) {
 		{
 			// we want to make certain that buildx can catalog a single go binary and get a SBOM report that is not empty
 			name: "catalog-single-go-binary",
-			args: []string{"packages", "-o", "json", getSyftBinaryLocation(t)},
+			args: []string{"packages", "-o", "json", getBuildxBinaryLocation(t)},
 			assertions: []traitAssertion{
 				assertJsonReport,
 				assertStdoutLengthGreaterThan(1000),
@@ -155,8 +155,8 @@ func TestPackagesCmdFlags(t *testing.T) {
 			name: "responds-to-package-cataloger-search-options",
 			args: []string{"packages", "-vv"},
 			env: map[string]string{
-				"SYFT_PACKAGE_SEARCH_UNINDEXED_ARCHIVES": "true",
-				"SYFT_PACKAGE_SEARCH_INDEXED_ARCHIVES":   "false",
+				"BUILDX_PACKAGE_SEARCH_UNINDEXED_ARCHIVES": "true",
+				"BUILDX_PACKAGE_SEARCH_INDEXED_ARCHIVES":   "false",
 			},
 			assertions: []traitAssertion{
 				// the application config in the log matches that of what we expect to have been configured. Note:
@@ -207,7 +207,7 @@ func TestPackagesCmdFlags(t *testing.T) {
 			name: "override-default-parallelism",
 			args: []string{"packages", "-vvv", "-o", "json", coverageImage},
 			env: map[string]string{
-				"SYFT_PARALLELISM": "2",
+				"BUILDX_PARALLELISM": "2",
 			},
 			assertions: []traitAssertion{
 				// the application config in the log matches that of what we expect to have been configured.
@@ -232,8 +232,8 @@ func TestPackagesCmdFlags(t *testing.T) {
 			name: "password and key not in config output",
 			args: []string{"packages", "-vvv", "-o", "json", coverageImage},
 			env: map[string]string{
-				"SYFT_ATTEST_PASSWORD": "secret_password",
-				"SYFT_ATTEST_KEY":      "secret_key_path",
+				"BUILDX_ATTEST_PASSWORD": "secret_password",
+				"BUILDX_ATTEST_KEY":      "secret_key_path",
 			},
 			assertions: []traitAssertion{
 				assertNotInOutput("secret_password"),
@@ -246,7 +246,7 @@ func TestPackagesCmdFlags(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			cmd, stdout, stderr := runSyft(t, test.env, test.args...)
+			cmd, stdout, stderr := runBuildx(t, test.env, test.args...)
 			for _, traitFn := range test.assertions {
 				traitFn(t, stdout, stderr, cmd.ProcessState.ExitCode())
 			}
@@ -279,9 +279,9 @@ func TestRegistryAuth(t *testing.T) {
 			name: "use creds",
 			args: args,
 			env: map[string]string{
-				"SYFT_REGISTRY_AUTH_AUTHORITY": host,
-				"SYFT_REGISTRY_AUTH_USERNAME":  "username",
-				"SYFT_REGISTRY_AUTH_PASSWORD":  "password",
+				"BUILDX_REGISTRY_AUTH_AUTHORITY": host,
+				"BUILDX_REGISTRY_AUTH_USERNAME":  "username",
+				"BUILDX_REGISTRY_AUTH_PASSWORD":  "password",
 			},
 			assertions: []traitAssertion{
 				assertInOutput("source=OciRegistry"),
@@ -293,8 +293,8 @@ func TestRegistryAuth(t *testing.T) {
 			name: "use token",
 			args: args,
 			env: map[string]string{
-				"SYFT_REGISTRY_AUTH_AUTHORITY": host,
-				"SYFT_REGISTRY_AUTH_TOKEN":     "token",
+				"BUILDX_REGISTRY_AUTH_AUTHORITY": host,
+				"BUILDX_REGISTRY_AUTH_TOKEN":     "token",
 			},
 			assertions: []traitAssertion{
 				assertInOutput("source=OciRegistry"),
@@ -306,7 +306,7 @@ func TestRegistryAuth(t *testing.T) {
 			name: "not enough info fallsback to keychain",
 			args: args,
 			env: map[string]string{
-				"SYFT_REGISTRY_AUTH_AUTHORITY": host,
+				"BUILDX_REGISTRY_AUTH_AUTHORITY": host,
 			},
 			assertions: []traitAssertion{
 				assertInOutput("source=OciRegistry"),
@@ -318,7 +318,7 @@ func TestRegistryAuth(t *testing.T) {
 			name: "allows insecure http flag",
 			args: args,
 			env: map[string]string{
-				"SYFT_REGISTRY_INSECURE_USE_HTTP": "true",
+				"BUILDX_REGISTRY_INSECURE_USE_HTTP": "true",
 			},
 			assertions: []traitAssertion{
 				assertInOutput("insecure-use-http: true"),
@@ -328,7 +328,7 @@ func TestRegistryAuth(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			cmd, stdout, stderr := runSyft(t, test.env, test.args...)
+			cmd, stdout, stderr := runBuildx(t, test.env, test.args...)
 			for _, traitAssertionFn := range test.assertions {
 				traitAssertionFn(t, stdout, stderr, cmd.ProcessState.ExitCode())
 			}

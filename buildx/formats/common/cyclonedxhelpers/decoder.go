@@ -39,7 +39,7 @@ func GetDecoder(format cyclonedx.BOMFileFormat) sbom.Decoder {
 		if err != nil {
 			return nil, err
 		}
-		s, err := ToSyftModel(bom)
+		s, err := ToBuildxModel(bom)
 		if err != nil {
 			return nil, err
 		}
@@ -47,7 +47,7 @@ func GetDecoder(format cyclonedx.BOMFileFormat) sbom.Decoder {
 	}
 }
 
-func ToSyftModel(bom *cyclonedx.BOM) (*sbom.SBOM, error) {
+func ToBuildxModel(bom *cyclonedx.BOM) (*sbom.SBOM, error) {
 	if bom == nil {
 		return nil, fmt.Errorf("no content defined in CycloneDX BOM")
 	}
@@ -89,9 +89,9 @@ func collectPackages(component *cyclonedx.Component, s *sbom.SBOM, idMap map[str
 	case cyclonedx.ComponentTypeApplication, cyclonedx.ComponentTypeFramework, cyclonedx.ComponentTypeLibrary:
 		p := decodeComponent(component)
 		idMap[component.BOMRef] = p
-		syftID := extractSyftPacakgeID(component.BOMRef)
-		if syftID != "" {
-			idMap[syftID] = p
+		buildxID := extractBuildxPacakgeID(component.BOMRef)
+		if buildxID != "" {
+			idMap[buildxID] = p
 		}
 		// TODO there must be a better way than needing to call this manually:
 		p.SetID()
@@ -105,7 +105,7 @@ func collectPackages(component *cyclonedx.Component, s *sbom.SBOM, idMap map[str
 	}
 }
 
-func extractSyftPacakgeID(i string) string {
+func extractBuildxPacakgeID(i string) string {
 	instance, err := packageurl.FromString(i)
 	if err != nil {
 		return ""

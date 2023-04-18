@@ -39,10 +39,10 @@ else
 fi
 
 # run buildx
-SYFT_PATH="${DISTDIR}/darwin-build_darwin_amd64_v1/buildx"
-chmod 755 "${SYFT_PATH}"
-"${SYFT_PATH}" version
-SYFT_CHECK_FOR_APP_UPDATE=0 "${SYFT_PATH}" packages docker-archive:${TEST_IMAGE_TAR} -vv -o json > "${REPORT}"
+BUILDX_PATH="${DISTDIR}/darwin-build_darwin_amd64_v1/buildx"
+chmod 755 "${BUILDX_PATH}"
+"${BUILDX_PATH}" version
+BUILDX_CHECK_FOR_APP_UPDATE=0 "${BUILDX_PATH}" packages docker-archive:${TEST_IMAGE_TAR} -vv -o json > "${REPORT}"
 
 # keep the generated report around
 mkdir -p ${RESULTSDIR}

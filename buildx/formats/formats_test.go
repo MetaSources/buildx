@@ -14,7 +14,7 @@ import (
 	"github.com/metasources/buildx/buildx/formats/github"
 	"github.com/metasources/buildx/buildx/formats/spdxjson"
 	"github.com/metasources/buildx/buildx/formats/spdxtagvalue"
-	"github.com/metasources/buildx/buildx/formats/syftjson"
+	"github.com/metasources/buildx/buildx/formats/buildxjson"
 	"github.com/metasources/buildx/buildx/formats/table"
 	"github.com/metasources/buildx/buildx/formats/template"
 	"github.com/metasources/buildx/buildx/formats/text"
@@ -28,7 +28,7 @@ func TestIdentify(t *testing.T) {
 	}{
 		{
 			fixture:  "test-fixtures/alpine-buildx.json",
-			expected: syftjson.ID,
+			expected: buildxjson.ID,
 		},
 	}
 	for _, test := range tests {
@@ -150,15 +150,15 @@ func TestByName(t *testing.T) {
 		// buildx JSON
 		{
 			name: "json",
-			want: syftjson.ID,
+			want: buildxjson.ID,
 		},
 		{
 			name: "buildx-json",
-			want: syftjson.ID,
+			want: buildxjson.ID,
 		},
 		{
-			name: "syftjson", // clean variant
-			want: syftjson.ID,
+			name: "buildxjson", // clean variant
+			want: buildxjson.ID,
 		},
 
 		// GitHub JSON

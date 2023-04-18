@@ -4,7 +4,7 @@ import (
 	"github.com/wagoodman/go-partybus"
 
 	"github.com/metasources/buildx/internal/log"
-	syftEvent "github.com/metasources/buildx/buildx/event"
+	buildxEvent "github.com/metasources/buildx/buildx/event"
 )
 
 type loggerUI struct {
@@ -23,7 +23,7 @@ func (l *loggerUI) Setup(unsubscribe func() error) error {
 
 func (l loggerUI) Handle(event partybus.Event) error {
 	// ignore all events except for the final event
-	if event.Type != syftEvent.Exit {
+	if event.Type != buildxEvent.Exit {
 		return nil
 	}
 

@@ -14,12 +14,12 @@ import (
 	"github.com/wagoodman/jotframe/pkg/frame"
 
 	"github.com/metasources/buildx/internal"
-	syftEventParsers "github.com/metasources/buildx/buildx/event/parsers"
+	buildxEventParsers "github.com/metasources/buildx/buildx/event/parsers"
 )
 
 // handleAppUpdateAvailable is a UI handler function to display a new application version to the top of the screen.
 func handleAppUpdateAvailable(_ context.Context, fr *frame.Frame, event partybus.Event, _ *sync.WaitGroup) error {
-	newVersion, err := syftEventParsers.ParseAppUpdateAvailable(event)
+	newVersion, err := buildxEventParsers.ParseAppUpdateAvailable(event)
 	if err != nil {
 		return fmt.Errorf("bad AppUpdateAvailable event: %w", err)
 	}

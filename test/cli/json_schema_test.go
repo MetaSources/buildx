@@ -61,7 +61,7 @@ func TestJSONSchema(t *testing.T) {
 				args = append(args, a)
 			}
 
-			_, stdout, stderr := runSyft(t, nil, args...)
+			_, stdout, stderr := runBuildx(t, nil, args...)
 
 			if len(strings.Trim(stdout, "\n ")) < 100 {
 				t.Fatalf("bad buildx run:\noutput: %q\n:error: %q", stdout, stderr)

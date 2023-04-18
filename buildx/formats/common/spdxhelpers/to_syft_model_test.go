@@ -13,8 +13,8 @@ import (
 	"github.com/metasources/buildx/buildx/source"
 )
 
-func TestToSyftModel(t *testing.T) {
-	sbom, err := ToSyftModel(&spdx.Document{
+func TestToBuildxModel(t *testing.T) {
+	sbom, err := ToBuildxModel(&spdx.Document{
 		SPDXVersion:                "1",
 		DataLicense:                "GPL",
 		SPDXIdentifier:             "id-doc-1",
@@ -302,7 +302,7 @@ func TestH1Digest(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			p := toSyftPackage(&test.pkg)
+			p := toBuildxPackage(&test.pkg)
 			require.Equal(t, pkg.GolangBinMetadataType, p.MetadataType)
 			meta := p.Metadata.(pkg.GolangBinMetadata)
 			require.Equal(t, test.expectedDigest, meta.H1Digest)
@@ -310,7 +310,7 @@ func TestH1Digest(t *testing.T) {
 	}
 }
 
-func Test_toSyftRelationships(t *testing.T) {
+func Test_toBuildxRelationships(t *testing.T) {
 	type args struct {
 		spdxIDMap map[string]interface{}
 		doc       *spdx.Document
@@ -409,7 +409,7 @@ func Test_toSyftRelationships(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			actual := toSyftRelationships(tt.args.spdxIDMap, tt.args.doc)
+			actual := toBuildxRelationships(tt.args.spdxIDMap, tt.args.doc)
 			require.Len(t, actual, len(tt.want))
 			for i := range actual {
 				require.Equal(t, tt.want[i].From.ID(), actual[i].From.ID())

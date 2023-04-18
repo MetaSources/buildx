@@ -1,4 +1,4 @@
-package syftjson
+package buildxjson
 
 import (
 	"github.com/metasources/buildx/internal"

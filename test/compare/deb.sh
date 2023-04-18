@@ -36,11 +36,11 @@ docker run --rm \
     -v /var/run/docker.sock://var/run/docker.sock \
     -v /${PWD}:/src \
     -v ${WORK_DIR}:${WORK_DIR} \
-    -e SYFT_CHECK_FOR_APP_UPDATE=0 \
+    -e BUILDX_CHECK_FOR_APP_UPDATE=0 \
     -w /src \
     ubuntu:latest \
         /bin/bash -x -c "\
-            DEBIAN_FRONTEND=noninteractive apt install ${DISTDIR}/syft_*_linux_amd64.deb -y && \
+            DEBIAN_FRONTEND=noninteractive apt install ${DISTDIR}/buildx_*_linux_amd64.deb -y && \
             buildx version && \
             buildx packages ${TEST_IMAGE} -vv -o json > ${REPORT} \
         "

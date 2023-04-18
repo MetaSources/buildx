@@ -1,11 +1,11 @@
-package syftjson
+package buildxjson
 
 import (
 	"encoding/json"
 	"fmt"
 	"io"
 
-	"github.com/metasources/buildx/buildx/formats/syftjson/model"
+	"github.com/metasources/buildx/buildx/formats/buildxjson/model"
 	"github.com/metasources/buildx/buildx/sbom"
 )
 
@@ -18,5 +18,5 @@ func decoder(reader io.Reader) (*sbom.SBOM, error) {
 		return nil, fmt.Errorf("unable to decode buildx-json: %w", err)
 	}
 
-	return toSyftModel(doc)
+	return toBuildxModel(doc)
 }

@@ -26,27 +26,27 @@ func TestSpdxValidationTooling(t *testing.T) {
 	}
 
 	env := map[string]string{
-		"SYFT_FILE_METADATA_CATALOGER_ENABLED": "true",
-		"SYFT_FILE_CONTENTS_CATALOGER_ENABLED": "true",
-		"SYFT_FILE_METADATA_DIGESTS":           "sha1",
+		"BUILDX_FILE_METADATA_CATALOGER_ENABLED": "true",
+		"BUILDX_FILE_CONTENTS_CATALOGER_ENABLED": "true",
+		"BUILDX_FILE_METADATA_DIGESTS":           "sha1",
 	}
 
 	tests := []struct {
 		name     string
-		syftArgs []string
+		buildxArgs []string
 		images   []string
 		setup    func(t *testing.T)
 		env      map[string]string
 	}{
 		{
 			name:     "spdx validation tooling tag value",
-			syftArgs: []string{"packages", "-o", "spdx"},
+			buildxArgs: []string{"packages", "-o", "spdx"},
 			images:   images,
 			env:      env,
 		},
 		{
 			name:     "spdx validation tooling json",
-			syftArgs: []string{"packages", "-o", "spdx-json"},
+			buildxArgs: []string{"packages", "-o", "spdx-json"},
 			images:   images,
 			env:      env,
 		},
@@ -56,7 +56,7 @@ func TestSpdxValidationTooling(t *testing.T) {
 		for _, image := range test.images {
 			t.Run(test.name+"_"+image, func(t *testing.T) {
 
-				args := append(test.syftArgs, image)
+				args := append(test.buildxArgs, image)
 
 				var suffix string
 				if strings.Contains(test.name, "json") {
@@ -70,7 +70,7 @@ func TestSpdxValidationTooling(t *testing.T) {
 
 				args = append(args, "--file", sbomPath)
 
-				cmd, _, stderr := runSyft(t, test.env, args...)
+				cmd, _, stderr := runBuildx(t, test.env, args...)
 				if cmd.ProcessState.ExitCode() != 0 {
 					t.Fatalf("failed to run buildx: %s", stderr)
 				}

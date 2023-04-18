@@ -122,15 +122,15 @@ func runCycloneDXInDocker(t testing.TB, env map[string]string, image string, f *
 	return cmd, stdout, stderr
 }
 
-func runSyftInDocker(t testing.TB, env map[string]string, image string, args ...string) (*exec.Cmd, string, string) {
+func runBuildxInDocker(t testing.TB, env map[string]string, image string, args ...string) (*exec.Cmd, string, string) {
 	allArgs := append(
 		[]string{
 			"run",
 			"-t",
 			"-e",
-			"SYFT_CHECK_FOR_APP_UPDATE=false",
+			"BUILDX_CHECK_FOR_APP_UPDATE=false",
 			"-v",
-			fmt.Sprintf("%s:/buildx", getSyftBinaryLocationByOS(t, "linux")),
+			fmt.Sprintf("%s:/buildx", getBuildxBinaryLocationByOS(t, "linux")),
 			image,
 			"/buildx",
 		},
@@ -141,27 +141,27 @@ func runSyftInDocker(t testing.TB, env map[string]string, image string, args ...
 	return cmd, stdout, stderr
 }
 
-func runSyft(t testing.TB, env map[string]string, args ...string) (*exec.Cmd, string, string) {
-	return runSyftCommand(t, env, true, args...)
+func runBuildx(t testing.TB, env map[string]string, args ...string) (*exec.Cmd, string, string) {
+	return runBuildxCommand(t, env, true, args...)
 }
 
-func runSyftSafe(t testing.TB, env map[string]string, args ...string) (*exec.Cmd, string, string) {
-	return runSyftCommand(t, env, false, args...)
+func runBuildxSafe(t testing.TB, env map[string]string, args ...string) (*exec.Cmd, string, string) {
+	return runBuildxCommand(t, env, false, args...)
 }
 
-func runSyftCommand(t testing.TB, env map[string]string, expectError bool, args ...string) (*exec.Cmd, string, string) {
+func runBuildxCommand(t testing.TB, env map[string]string, expectError bool, args ...string) (*exec.Cmd, string, string) {
 	cancel := make(chan bool, 1)
 	defer func() {
 		cancel <- true
 	}()
 
-	cmd := getSyftCommand(t, args...)
+	cmd := getBuildxCommand(t, args...)
 	if env == nil {
 		env = make(map[string]string)
 	}
 
 	// we should not have tests reaching out for app update checks
-	env["SYFT_CHECK_FOR_APP_UPDATE"] = "false"
+	env["BUILDX_CHECK_FOR_APP_UPDATE"] = "false"
 
 	timeout := func() {
 		select {
@@ -190,7 +190,7 @@ func runSyftCommand(t testing.TB, env map[string]string, expectError bool, args 
 
 		// this probably indicates a timeout... lets run it again with more verbosity to help debug issues
 		args = append(args, "-vv")
-		cmd = getSyftCommand(t, args...)
+		cmd = getBuildxCommand(t, args...)
 
 		go timeout()
 		stdout, stderr, err = runCommand(cmd, env)
@@ -216,7 +216,7 @@ func runCommandObj(t testing.TB, cmd *exec.Cmd, env map[string]string, expectErr
 	}
 
 	// we should not have tests reaching out for app update checks
-	env["SYFT_CHECK_FOR_APP_UPDATE"] = "false"
+	env["BUILDX_CHECK_FOR_APP_UPDATE"] = "false"
 
 	timeout := func() {
 		select {
@@ -290,19 +290,19 @@ func envMapToSlice(env map[string]string) (envList []string) {
 	return
 }
 
-func getSyftCommand(t testing.TB, args ...string) *exec.Cmd {
-	return exec.Command(getSyftBinaryLocation(t), args...)
+func getBuildxCommand(t testing.TB, args ...string) *exec.Cmd {
+	return exec.Command(getBuildxBinaryLocation(t), args...)
 }
 
-func getSyftBinaryLocation(t testing.TB) string {
-	if os.Getenv("SYFT_BINARY_LOCATION") != "" {
-		// SYFT_BINARY_LOCATION is the absolute path to the snapshot binary
-		return os.Getenv("SYFT_BINARY_LOCATION")
+func getBuildxBinaryLocation(t testing.TB) string {
+	if os.Getenv("BUILDX_BINARY_LOCATION") != "" {
+		// BUILDX_BINARY_LOCATION is the absolute path to the snapshot binary
+		return os.Getenv("BUILDX_BINARY_LOCATION")
 	}
-	return getSyftBinaryLocationByOS(t, runtime.GOOS)
+	return getBuildxBinaryLocationByOS(t, runtime.GOOS)
 }
 
-func getSyftBinaryLocationByOS(t testing.TB, goOS string) string {
+func getBuildxBinaryLocationByOS(t testing.TB, goOS string) string {
 	// note: for amd64 we need to update the snapshot location with the v1 suffix
 	// see : https://goreleaser.com/customization/build/#why-is-there-a-_v1-suffix-on-amd64-builds
 	archPath := runtime.GOARCH

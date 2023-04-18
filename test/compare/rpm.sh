@@ -35,11 +35,11 @@ docker run --rm \
     -v /var/run/docker.sock://var/run/docker.sock \
     -v /${PWD}:/src \
     -v ${WORK_DIR}:${WORK_DIR} \
-    -e SYFT_CHECK_FOR_APP_UPDATE=0 \
+    -e BUILDX_CHECK_FOR_APP_UPDATE=0 \
     -w /src \
     centos:latest \
         /bin/bash -x -c "\
-            rpm -ivh ${DISTDIR}/syft_*_linux_amd64.rpm && \
+            rpm -ivh ${DISTDIR}/buildx_*_linux_amd64.rpm && \
             buildx version && \
             buildx packages ${TEST_IMAGE} -vv -o json > ${REPORT} \
         "

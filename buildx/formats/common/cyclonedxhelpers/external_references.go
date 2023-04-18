@@ -6,7 +6,7 @@ import (
 
 	"github.com/CycloneDX/cyclonedx-go"
 
-	syftFile "github.com/metasources/buildx/buildx/file"
+	buildxFile "github.com/metasources/buildx/buildx/file"
 	"github.com/metasources/buildx/buildx/pkg"
 )
 
@@ -111,12 +111,12 @@ func decodeExternalReferences(c *cyclonedx.Component, metadata interface{}) {
 	case *pkg.GemMetadata:
 		meta.Homepage = refURL(c, cyclonedx.ERTypeWebsite)
 	case *pkg.JavaMetadata:
-		var digests []syftFile.Digest
+		var digests []buildxFile.Digest
 		if ref := findExternalRef(c, cyclonedx.ERTypeBuildMeta); ref != nil {
 			if ref.Hashes != nil {
 				for _, hash := range *ref.Hashes {
-					digests = append(digests, syftFile.Digest{
-						Algorithm: syftFile.CleanDigestAlgorithmName(string(hash.Algorithm)),
+					digests = append(digests, buildxFile.Digest{
+						Algorithm: buildxFile.CleanDigestAlgorithmName(string(hash.Algorithm)),
 						Value:     hash.Value,
 					})
 				}

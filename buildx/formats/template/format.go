@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/metasources/buildx/buildx/formats/syftjson"
+	"github.com/metasources/buildx/buildx/formats/buildxjson"
 	"github.com/metasources/buildx/buildx/sbom"
 )
 
@@ -46,7 +46,7 @@ func (f OutputFormat) Encode(output io.Writer, s sbom.SBOM) error {
 		return err
 	}
 
-	doc := syftjson.ToFormatModel(s)
+	doc := buildxjson.ToFormatModel(s)
 	return tmpl.Execute(output, doc)
 }
 

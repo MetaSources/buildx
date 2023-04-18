@@ -13,7 +13,7 @@ import (
 	"github.com/invopop/jsonschema"
 
 	"github.com/metasources/buildx/internal"
-	syftjsonModel "github.com/metasources/buildx/buildx/formats/syftjson/model"
+	buildxjsonModel "github.com/metasources/buildx/buildx/formats/buildxjson/model"
 	"github.com/metasources/buildx/buildx/pkg"
 )
 
@@ -71,7 +71,7 @@ func build() *jsonschema.Schema {
 			return strings.TrimPrefix(r.Name(), "JSON")
 		},
 	}
-	documentSchema := reflector.ReflectFromType(reflect.TypeOf(&syftjsonModel.Document{}))
+	documentSchema := reflector.ReflectFromType(reflect.TypeOf(&buildxjsonModel.Document{}))
 	metadataSchema := reflector.ReflectFromType(reflect.TypeOf(&artifactMetadataContainer{}))
 
 	// TODO: inject source definitions

@@ -1,4 +1,4 @@
-package syftjson
+package buildxjson
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 	"github.com/metasources/buildx/buildx/artifact"
 	"github.com/metasources/buildx/buildx/cpe"
 	"github.com/metasources/buildx/buildx/file"
-	"github.com/metasources/buildx/buildx/formats/syftjson/model"
+	"github.com/metasources/buildx/buildx/formats/buildxjson/model"
 	"github.com/metasources/buildx/buildx/linux"
 	"github.com/metasources/buildx/buildx/pkg"
 	"github.com/metasources/buildx/buildx/sbom"

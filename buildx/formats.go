@@ -7,7 +7,7 @@ import (
 	"github.com/metasources/buildx/buildx/formats/github"
 	"github.com/metasources/buildx/buildx/formats/spdxjson"
 	"github.com/metasources/buildx/buildx/formats/spdxtagvalue"
-	"github.com/metasources/buildx/buildx/formats/syftjson"
+	"github.com/metasources/buildx/buildx/formats/buildxjson"
 	"github.com/metasources/buildx/buildx/formats/table"
 	"github.com/metasources/buildx/buildx/formats/template"
 	"github.com/metasources/buildx/buildx/formats/text"
@@ -17,7 +17,7 @@ import (
 // these have been exported for the benefit of API users
 // TODO: deprecated: now that the formats package has been moved to buildx/formats, will be removed in v1.0.0
 const (
-	JSONFormatID          = syftjson.ID
+	JSONFormatID          = buildxjson.ID
 	TextFormatID          = text.ID
 	TableFormatID         = table.ID
 	CycloneDxXMLFormatID  = cyclonedxxml.ID

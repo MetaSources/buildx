@@ -14,7 +14,7 @@ import (
 	"github.com/metasources/buildx/buildx/formats"
 	"github.com/metasources/buildx/buildx/formats/cyclonedxjson"
 	"github.com/metasources/buildx/buildx/formats/cyclonedxxml"
-	"github.com/metasources/buildx/buildx/formats/syftjson"
+	"github.com/metasources/buildx/buildx/formats/buildxjson"
 	"github.com/metasources/buildx/buildx/sbom"
 	"github.com/metasources/buildx/buildx/source"
 )
@@ -34,7 +34,7 @@ func TestEncodeDecodeEncodeCycleComparison(t *testing.T) {
 		json         bool
 	}{
 		{
-			formatOption: syftjson.ID,
+			formatOption: buildxjson.ID,
 			redactor: func(in []byte) []byte {
 				// no redactions necessary
 				return in

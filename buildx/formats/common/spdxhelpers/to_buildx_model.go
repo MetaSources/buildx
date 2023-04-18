@@ -20,7 +20,7 @@ import (
 	"github.com/metasources/buildx/buildx/source"
 )
 
-func ToSyftModel(doc *spdx.Document) (*sbom.SBOM, error) {
+func ToBuildxModel(doc *spdx.Document) (*sbom.SBOM, error) {
 	if doc == nil {
 		return nil, errors.New("cannot convert SPDX document to buildx model because document is nil")
 	}
@@ -40,11 +40,11 @@ func ToSyftModel(doc *spdx.Document) (*sbom.SBOM, error) {
 		},
 	}
 
-	collectSyftPackages(s, spdxIDMap, doc)
+	collectBuildxPackages(s, spdxIDMap, doc)
 
-	collectSyftFiles(s, spdxIDMap, doc)
+	collectBuildxFiles(s, spdxIDMap, doc)
 
-	s.Relationships = toSyftRelationships(spdxIDMap, doc)
+	s.Relationships = toBuildxRelationships(spdxIDMap, doc)
 
 	return s, nil
 }
@@ -106,17 +106,17 @@ func findLinuxReleaseByPURL(doc *spdx.Document) *linux.Release {
 	return nil
 }
 
-func collectSyftPackages(s *sbom.SBOM, spdxIDMap map[string]interface{}, doc *spdx.Document) {
+func collectBuildxPackages(s *sbom.SBOM, spdxIDMap map[string]interface{}, doc *spdx.Document) {
 	for _, p := range doc.Packages {
-		syftPkg := toSyftPackage(p)
-		spdxIDMap[string(p.PackageSPDXIdentifier)] = syftPkg
-		s.Artifacts.PackageCatalog.Add(*syftPkg)
+		buildxPkg := toBuildxPackage(p)
+		spdxIDMap[string(p.PackageSPDXIdentifier)] = buildxPkg
+		s.Artifacts.PackageCatalog.Add(*buildxPkg)
 	}
 }
 
-func collectSyftFiles(s *sbom.SBOM, spdxIDMap map[string]interface{}, doc *spdx.Document) {
+func collectBuildxFiles(s *sbom.SBOM, spdxIDMap map[string]interface{}, doc *spdx.Document) {
 	for _, f := range doc.Files {
-		l := toSyftLocation(f)
+		l := toBuildxLocation(f)
 		spdxIDMap[string(f.FileSPDXIdentifier)] = l
 
 		s.Artifacts.FileMetadata[l.Coordinates] = toFileMetadata(f)
@@ -156,7 +156,7 @@ func toFileMetadata(f *spdx.File) (meta source.FileMetadata) {
 	return meta
 }
 
-func toSyftRelationships(spdxIDMap map[string]interface{}, doc *spdx.Document) []artifact.Relationship {
+func toBuildxRelationships(spdxIDMap map[string]interface{}, doc *spdx.Document) []artifact.Relationship {
 	var out []artifact.Relationship
 	for _, r := range doc.Relationships {
 		// FIXME what to do with r.RefA.DocumentRefID and  r.RefA.SpecialID
@@ -211,7 +211,7 @@ func toSyftRelationships(spdxIDMap map[string]interface{}, doc *spdx.Document) [
 	return out
 }
 
-func toSyftCoordinates(f *spdx.File) source.Coordinates {
+func toBuildxCoordinates(f *spdx.File) source.Coordinates {
 	const layerIDPrefix = "layerID: "
 	var fileSystemID string
 	if strings.Index(f.FileComment, layerIDPrefix) == 0 {
@@ -226,8 +226,8 @@ func toSyftCoordinates(f *spdx.File) source.Coordinates {
 	}
 }
 
-func toSyftLocation(f *spdx.File) *source.Location {
-	l := source.NewVirtualLocationFromCoordinates(toSyftCoordinates(f), f.FileName)
+func toBuildxLocation(f *spdx.File) *source.Location {
+	l := source.NewVirtualLocationFromCoordinates(toBuildxCoordinates(f), f.FileName)
 	return &l
 }
 
@@ -272,7 +272,7 @@ func extractPkgInfo(p *spdx.Package) pkgInfo {
 	}
 }
 
-func toSyftPackage(p *spdx.Package) *pkg.Package {
+func toBuildxPackage(p *spdx.Package) *pkg.Package {
 	info := extractPkgInfo(p)
 	metadataType, metadata := extractMetadata(p, info)
 	sP := pkg.Package{

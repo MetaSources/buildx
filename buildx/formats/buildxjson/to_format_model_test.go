@@ -1,4 +1,4 @@
-package syftjson
+package buildxjson
 
 import (
 	"testing"
@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/anchore/stereoscope/pkg/file"
-	"github.com/metasources/buildx/buildx/formats/syftjson/model"
+	"github.com/metasources/buildx/buildx/formats/buildxjson/model"
 	"github.com/metasources/buildx/buildx/source"
 )
 

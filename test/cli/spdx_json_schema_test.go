@@ -54,7 +54,7 @@ func TestSPDXJSONSchema(t *testing.T) {
 				args = append(args, a)
 			}
 
-			_, stdout, _ := runSyft(t, nil, args...)
+			_, stdout, _ := runBuildx(t, nil, args...)
 
 			if len(strings.Trim(stdout, "\n ")) < 100 {
 				t.Fatalf("bad buildx output: %q", stdout)

@@ -21,13 +21,13 @@ import (
 	"github.com/metasources/buildx/buildx"
 	"github.com/metasources/buildx/buildx/artifact"
 	"github.com/metasources/buildx/buildx/event"
-	"github.com/metasources/buildx/buildx/formats/syftjson"
+	"github.com/metasources/buildx/buildx/formats/buildxjson"
 	"github.com/metasources/buildx/buildx/sbom"
 	"github.com/metasources/buildx/buildx/source"
 )
 
 func Run(_ context.Context, app *config.Application, args []string) error {
-	f := syftjson.Format()
+	f := buildxjson.Format()
 	writer, err := sbom.NewWriter(sbom.WriterOption{
 		Format: f,
 		Path:   app.File,

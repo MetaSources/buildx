@@ -16,7 +16,7 @@ import (
 	"github.com/metasources/buildx/buildx/formats/github"
 	"github.com/metasources/buildx/buildx/formats/spdxjson"
 	"github.com/metasources/buildx/buildx/formats/spdxtagvalue"
-	"github.com/metasources/buildx/buildx/formats/syftjson"
+	"github.com/metasources/buildx/buildx/formats/buildxjson"
 	"github.com/metasources/buildx/buildx/formats/table"
 	"github.com/metasources/buildx/buildx/formats/template"
 	"github.com/metasources/buildx/buildx/formats/text"
@@ -25,7 +25,7 @@ import (
 
 func Formats() []sbom.Format {
 	return []sbom.Format{
-		syftjson.Format(),
+		buildxjson.Format(),
 		cyclonedxxml.Format(),
 		cyclonedxjson.Format(),
 		github.Format(),

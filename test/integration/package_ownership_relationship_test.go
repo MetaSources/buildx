@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/metasources/buildx/buildx/formats/syftjson"
-	syftjsonModel "github.com/metasources/buildx/buildx/formats/syftjson/model"
+	"github.com/metasources/buildx/buildx/formats/buildxjson"
+	buildxjsonModel "github.com/metasources/buildx/buildx/formats/buildxjson/model"
 	"github.com/metasources/buildx/buildx/source"
 )
 
@@ -26,12 +26,12 @@ func TestPackageOwnershipRelationships(t *testing.T) {
 			sbom, _ := catalogFixtureImage(t, test.fixture, source.SquashedScope, nil)
 
 			output := bytes.NewBufferString("")
-			err := syftjson.Format().Encode(output, sbom)
+			err := buildxjson.Format().Encode(output, sbom)
 			if err != nil {
 				t.Fatalf("unable to present: %+v", err)
 			}
 
-			var doc syftjsonModel.Document
+			var doc buildxjsonModel.Document
 			decoder := json.NewDecoder(output)
 			if err := decoder.Decode(&doc); err != nil {
 				t.Fatalf("unable to decode json doc: %+v", err)

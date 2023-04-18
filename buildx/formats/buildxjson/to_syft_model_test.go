@@ -1,4 +1,4 @@
-package syftjson
+package buildxjson
 
 import (
 	"testing"
@@ -9,12 +9,12 @@ import (
 	stereoFile "github.com/anchore/stereoscope/pkg/file"
 	"github.com/metasources/buildx/buildx/artifact"
 	"github.com/metasources/buildx/buildx/file"
-	"github.com/metasources/buildx/buildx/formats/syftjson/model"
+	"github.com/metasources/buildx/buildx/formats/buildxjson/model"
 	"github.com/metasources/buildx/buildx/sbom"
 	"github.com/metasources/buildx/buildx/source"
 )
 
-func Test_toSyftSourceData(t *testing.T) {
+func Test_toBuildxSourceData(t *testing.T) {
 	allSchemes := strset.New()
 	for _, s := range source.AllSchemes {
 		allSchemes.Add(string(s))
@@ -73,7 +73,7 @@ func Test_toSyftSourceData(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			// assert the model transformation is correct
-			actual := toSyftSourceData(test.src)
+			actual := toBuildxSourceData(test.src)
 			assert.Equal(t, test.expected, *actual)
 
 			// track each scheme tested (passed or not)
@@ -86,7 +86,7 @@ func Test_toSyftSourceData(t *testing.T) {
 }
 
 func Test_idsHaveChanged(t *testing.T) {
-	s, err := toSyftModel(model.Document{
+	s, err := toBuildxModel(model.Document{
 		Source: model.Source{
 			Type:   "file",
 			Target: "some/path",
@@ -128,7 +128,7 @@ func Test_idsHaveChanged(t *testing.T) {
 	assert.Equal(t, "pkg-2", to.Name)
 }
 
-func Test_toSyftFiles(t *testing.T) {
+func Test_toBuildxFiles(t *testing.T) {
 	coord := source.Coordinates{
 		RealPath:     "/somerwhere/place",
 		FileSystemID: "abc",
@@ -224,7 +224,7 @@ func Test_toSyftFiles(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equal(t, tt.want, toSyftFiles(tt.files))
+			assert.Equal(t, tt.want, toBuildxFiles(tt.files))
 		})
 	}
 }

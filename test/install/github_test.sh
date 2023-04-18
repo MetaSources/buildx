@@ -38,7 +38,7 @@ test_download_github_release_checksums() {
 
   actual_filepath=$(download_github_release_checksums "${github_download}" "${name}" "${version}" "${tmpdir}")
   assertFilesEqual \
-    "./test-fixtures/syft_0.36.0_checksums.txt" \
+    "./test-fixtures/buildx_0.36.0_checksums.txt" \
     "${actual_filepath}" \
     "unable to find release tag"
 

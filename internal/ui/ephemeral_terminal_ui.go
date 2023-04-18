@@ -16,7 +16,7 @@ import (
 
 	"github.com/anchore/go-logger"
 	"github.com/metasources/buildx/internal/log"
-	syftEvent "github.com/metasources/buildx/buildx/event"
+	buildxEvent "github.com/metasources/buildx/buildx/event"
 	"github.com/metasources/buildx/ui"
 )
 
@@ -76,12 +76,12 @@ func (h *ephemeralTerminalUI) Handle(event partybus.Event) error {
 			log.Errorf("unable to show %s event: %+v", event.Type, err)
 		}
 
-	case event.Type == syftEvent.AppUpdateAvailable:
+	case event.Type == buildxEvent.AppUpdateAvailable:
 		if err := handleAppUpdateAvailable(ctx, h.frame, event, h.waitGroup); err != nil {
 			log.Errorf("unable to show %s event: %+v", event.Type, err)
 		}
 
-	case event.Type == syftEvent.Exit:
+	case event.Type == buildxEvent.Exit:
 		// we need to close the screen now since signaling the sbom is ready means that we
 		// are about to write bytes to stdout, so we should reset the terminal state first
 		h.closeScreen(false)

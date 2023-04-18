@@ -13,7 +13,7 @@ import (
 	"github.com/wagoodman/jotframe/pkg/frame"
 
 	stereoscopeEvent "github.com/anchore/stereoscope/pkg/event"
-	syftEvent "github.com/metasources/buildx/buildx/event"
+	buildxEvent "github.com/metasources/buildx/buildx/event"
 )
 
 // Handler is an aggregated event handler for the set of supported events (PullDockerImage, ReadImage, FetchImage, PackageCatalogerStarted)
@@ -31,14 +31,14 @@ func (r *Handler) RespondsTo(event partybus.Event) bool {
 	case stereoscopeEvent.PullDockerImage,
 		stereoscopeEvent.ReadImage,
 		stereoscopeEvent.FetchImage,
-		syftEvent.PackageCatalogerStarted,
-		syftEvent.SecretsCatalogerStarted,
-		syftEvent.FileDigestsCatalogerStarted,
-		syftEvent.FileMetadataCatalogerStarted,
-		syftEvent.FileIndexingStarted,
-		syftEvent.ImportStarted,
-		syftEvent.AttestationStarted,
-		syftEvent.CatalogerTaskStarted:
+		buildxEvent.PackageCatalogerStarted,
+		buildxEvent.SecretsCatalogerStarted,
+		buildxEvent.FileDigestsCatalogerStarted,
+		buildxEvent.FileMetadataCatalogerStarted,
+		buildxEvent.FileIndexingStarted,
+		buildxEvent.ImportStarted,
+		buildxEvent.AttestationStarted,
+		buildxEvent.CatalogerTaskStarted:
 		return true
 	default:
 		return false
@@ -57,28 +57,28 @@ func (r *Handler) Handle(ctx context.Context, fr *frame.Frame, event partybus.Ev
 	case stereoscopeEvent.FetchImage:
 		return FetchImageHandler(ctx, fr, event, wg)
 
-	case syftEvent.PackageCatalogerStarted:
+	case buildxEvent.PackageCatalogerStarted:
 		return PackageCatalogerStartedHandler(ctx, fr, event, wg)
 
-	case syftEvent.SecretsCatalogerStarted:
+	case buildxEvent.SecretsCatalogerStarted:
 		return SecretsCatalogerStartedHandler(ctx, fr, event, wg)
 
-	case syftEvent.FileDigestsCatalogerStarted:
+	case buildxEvent.FileDigestsCatalogerStarted:
 		return FileDigestsCatalogerStartedHandler(ctx, fr, event, wg)
 
-	case syftEvent.FileMetadataCatalogerStarted:
+	case buildxEvent.FileMetadataCatalogerStarted:
 		return FileMetadataCatalogerStartedHandler(ctx, fr, event, wg)
 
-	case syftEvent.FileIndexingStarted:
+	case buildxEvent.FileIndexingStarted:
 		return FileIndexingStartedHandler(ctx, fr, event, wg)
 
-	case syftEvent.ImportStarted:
+	case buildxEvent.ImportStarted:
 		return ImportStartedHandler(ctx, fr, event, wg)
 
-	case syftEvent.AttestationStarted:
+	case buildxEvent.AttestationStarted:
 		return AttestationStartedHandler(ctx, fr, event, wg)
 
-	case syftEvent.CatalogerTaskStarted:
+	case buildxEvent.CatalogerTaskStarted:
 		return CatalogerTaskStartedHandler(ctx, fr, event, wg)
 	}
 	return nil

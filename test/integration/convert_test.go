@@ -15,7 +15,7 @@ import (
 	"github.com/metasources/buildx/buildx/formats/cyclonedxxml"
 	"github.com/metasources/buildx/buildx/formats/spdxjson"
 	"github.com/metasources/buildx/buildx/formats/spdxtagvalue"
-	"github.com/metasources/buildx/buildx/formats/syftjson"
+	"github.com/metasources/buildx/buildx/formats/buildxjson"
 	"github.com/metasources/buildx/buildx/formats/table"
 	"github.com/metasources/buildx/buildx/sbom"
 	"github.com/metasources/buildx/buildx/source"
@@ -33,7 +33,7 @@ func TestConvertCmd(t *testing.T) {
 	}{
 		{
 			name:   "buildx-json",
-			format: syftjson.Format(),
+			format: buildxjson.Format(),
 		},
 		{
 			name:   "spdx-json",
@@ -54,22 +54,22 @@ func TestConvertCmd(t *testing.T) {
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			syftSbom, _ := catalogFixtureImage(t, "image-pkg-coverage", source.SquashedScope, nil)
-			syftFormat := syftjson.Format()
+			buildxSbom, _ := catalogFixtureImage(t, "image-pkg-coverage", source.SquashedScope, nil)
+			buildxFormat := buildxjson.Format()
 
-			syftFile, err := os.CreateTemp("", "test-convert-sbom-")
+			buildxFile, err := os.CreateTemp("", "test-convert-sbom-")
 			require.NoError(t, err)
 			defer func() {
-				_ = os.Remove(syftFile.Name())
+				_ = os.Remove(buildxFile.Name())
 			}()
 
-			err = syftFormat.Encode(syftFile, syftSbom)
+			err = buildxFormat.Encode(buildxFile, buildxSbom)
 			require.NoError(t, err)
 
 			formatFile, err := os.CreateTemp("", "test-convert-sbom-")
 			require.NoError(t, err)
 			defer func() {
-				_ = os.Remove(syftFile.Name())
+				_ = os.Remove(buildxFile.Name())
 			}()
 
 			ctx := context.Background()
@@ -84,7 +84,7 @@ func TestConvertCmd(t *testing.T) {
 				os.Stdout = rescue
 			}()
 
-			err = convert.Run(ctx, app, []string{syftFile.Name()})
+			err = convert.Run(ctx, app, []string{buildxFile.Name()})
 			require.NoError(t, err)
 			contents, err := os.ReadFile(formatFile.Name())
 			require.NoError(t, err)

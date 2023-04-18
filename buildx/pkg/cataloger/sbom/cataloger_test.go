@@ -7,7 +7,7 @@ import (
 
 	"github.com/metasources/buildx/buildx/artifact"
 	"github.com/metasources/buildx/buildx/cpe"
-	"github.com/metasources/buildx/buildx/formats/syftjson"
+	"github.com/metasources/buildx/buildx/formats/buildxjson"
 	"github.com/metasources/buildx/buildx/pkg"
 	"github.com/metasources/buildx/buildx/pkg/cataloger/internal/pkgtest"
 	"github.com/metasources/buildx/buildx/sbom"
@@ -274,7 +274,7 @@ func Test_parseSBOM(t *testing.T) {
 	}{
 		{
 			name:              "parse buildx JSON",
-			format:            syftjson.Format(),
+			format:            buildxjson.Format(),
 			fixture:           "test-fixtures/alpine/buildx-json",
 			wantPkgs:          expectedPkgs,
 			wantRelationships: expectedRelationships,

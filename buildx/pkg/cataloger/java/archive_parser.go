@@ -10,7 +10,7 @@ import (
 	"github.com/metasources/buildx/internal/file"
 	"github.com/metasources/buildx/internal/log"
 	"github.com/metasources/buildx/buildx/artifact"
-	syftFile "github.com/metasources/buildx/buildx/file"
+	buildxFile "github.com/metasources/buildx/buildx/file"
 	"github.com/metasources/buildx/buildx/pkg"
 	"github.com/metasources/buildx/buildx/pkg/cataloger/generic"
 	"github.com/metasources/buildx/buildx/source"
@@ -180,7 +180,7 @@ func (j *archiveParser) discoverMainPackage() (*pkg.Package, error) {
 	defer archiveCloser.Close()
 
 	// grab and assign digest for the entire archive
-	digests, err := syftFile.DigestsFromFile(archiveCloser, javaArchiveHashes)
+	digests, err := buildxFile.DigestsFromFile(archiveCloser, javaArchiveHashes)
 	if err != nil {
 		log.Warnf("failed to create digest for file=%q: %+v", j.archivePath, err)
 	}

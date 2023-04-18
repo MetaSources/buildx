@@ -21,7 +21,7 @@ import (
 	"github.com/metasources/buildx/buildx"
 	"github.com/metasources/buildx/buildx/event"
 	"github.com/metasources/buildx/buildx/event/monitor"
-	"github.com/metasources/buildx/buildx/formats/syftjson"
+	"github.com/metasources/buildx/buildx/formats/buildxjson"
 	"github.com/metasources/buildx/buildx/formats/table"
 	"github.com/metasources/buildx/buildx/sbom"
 	"github.com/metasources/buildx/buildx/source"
@@ -201,7 +201,7 @@ func ValidateOutputOptions(app *config.Application) error {
 
 	// cannot use table as default output format when using template output
 	if slices.Contains(app.Outputs, table.ID.String()) {
-		app.Outputs = []string{syftjson.ID.String()}
+		app.Outputs = []string{buildxjson.ID.String()}
 	}
 
 	return nil
